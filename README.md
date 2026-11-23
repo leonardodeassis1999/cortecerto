@@ -53,7 +53,7 @@ Senhas, chaves e dados de conexão ficam no arquivo `.env`, que **não** é vers
 As senhas dos usuários são guardadas apenas como hash.
 
 ## Planejamento
-Miro: _(cole aqui o link)_ · Cópia exportada em `docs/`.
+Miro: https://miro.com/welcomeonboard/a1lRUUdJWmJJUkpCZnVCYlNxNjB2Qnk3SWpSV1pYT1gxVTgyb1BZaHBPK2h5QUtXSmljUWRhZExZYW5FU2hCNGtaWWFTQjhVZlZmaWYva0MzMXJGOUJ2U21YTWw3ZzdZdFBBNVZ3TG9MOVNVbXQ1aktQc0lvV3grUWtWRlJoMkphWWluRVAxeXRuUUgwWDl3Mk1qRGVRPT0hdjE=?share_link_id=989423271915 · Cópia exportada em `docs/`.
 
 ## Uso de IA
 A IA (Claude, da Anthropic) foi usada como apoio. O registro de como foi usada e das
