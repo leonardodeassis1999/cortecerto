@@ -1,0 +1,11 @@
+{# Campo de formulário com destaque em vermelho e mensagem de erro (SE04) #}
+{% macro campo(field, ajuda="") %}
+  <div class="mb-3">
+    {{ field.label(class_="form-label") }}
+    {{ field(class_=("form-control is-invalid" if field.errors else "form-control"), **kwargs) }}
+    {% for erro in field.errors %}
+      <div class="invalid-feedback">{{ erro }}</div>
+    {% endfor %}
+    {% if ajuda %}<div class="form-text">{{ ajuda }}</div>{% endif %}
+  </div>
+{% endmacro %}

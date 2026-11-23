@@ -1,9 +1,11 @@
-"""Rotas gerais. As demais telas (T01 a T11) entram nas próximas etapas."""
+"""Página inicial."""
 from flask import Blueprint, render_template
+
+from app.routes.decoradores import redirecionar_se_logado
 
 bp = Blueprint("main", __name__)
 
 
 @bp.route("/")
 def index():
-    return render_template("index.html")
+    return redirecionar_se_logado() or render_template("index.html")

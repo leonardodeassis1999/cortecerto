@@ -4,7 +4,7 @@ Espelham o desenho do banco no Miro:
 USUARIO 1-N AGENDAMENTO, SERVICO 1-N AGENDAMENTO,
 BARBEIRO 1-N AGENDAMENTO, USUARIO 1-1 BARBEIRO, BARBEIRO 1-N HORARIO_TRABALHO.
 """
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -50,6 +50,25 @@ class Usuario(UserMixin, db.Model):
         """RN13: conta bloqueada enquanto 'bloqueado_ate' estiver no futuro."""
         agora = agora or datetime.now()
         return self.bloqueado_ate is not None and self.bloqueado_ate > agora
+
+    def registrar_falha_login(self, maximo: int, minutos: int,
+                              agora: datetime | None = None) -> bool:
+        """RN13: conta uma senha errada. Ao chegar no máximo, bloqueia a conta.
+
+        Devolve True se esta falha bloqueou a conta.
+        """
+        agora = agora or datetime.now()
+        self.tentativas_login = (self.tentativas_login or 0) + 1
+        if self.tentativas_login >= maximo:
+            self.bloqueado_ate = agora + timedelta(minutes=minutos)
+            self.tentativas_login = 0
+            return True
+        return False
+
+    def registrar_login_ok(self) -> None:
+        """Login correto: zera as tentativas erradas e libera o bloqueio."""
+        self.tentativas_login = 0
+        self.bloqueado_ate = None
 
     def __repr__(self) -> str:
         return f"<Usuario {self.email} ({self.tipo})>"

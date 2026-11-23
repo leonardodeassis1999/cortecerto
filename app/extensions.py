@@ -7,5 +7,6 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 csrf = CSRFProtect()
 
-login_manager.login_view = "main.index"  # será trocado para T01 Login
+login_manager.login_view = "auth.login"  # T01 Login
 login_manager.login_message = "Sessão expirada, faça login"  # SE12
+login_manager.login_message_category = "warning"

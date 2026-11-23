@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block conteudo %}
-  <h1 class="h3">CorteCerto</h1>
-  <p class="lead">Seu horário, sem espera e sem conflito.</p>
-  <p class="text-muted">Estrutura inicial funcionando. As telas entram nas próximas etapas.</p>
+  <div class="py-4 text-center">
+    <h1 class="display-6">CorteCerto</h1>
+    <p class="lead">Seu horário, sem espera e sem conflito.</p>
+    <a class="btn btn-dark me-2" href="{{ url_for('auth.login') }}">Entrar</a>
+    <a class="btn btn-outline-dark" href="{{ url_for('auth.cadastro') }}">Criar conta</a>
+  </div>
 {% endblock %}

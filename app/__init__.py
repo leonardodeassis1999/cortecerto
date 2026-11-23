@@ -19,7 +19,11 @@ def create_app(config_class: type = Config) -> Flask:
     csrf.init_app(app)
 
     from app import models  # noqa: F401  (registra as tabelas)
+    from app.routes.auth import bp as auth_bp
     from app.routes.main import bp as main_bp
+    from app.routes.paineis import bp as paineis_bp
 
     app.register_blueprint(main_bp)
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(paineis_bp)
     return app
