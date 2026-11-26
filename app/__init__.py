@@ -22,8 +22,13 @@ def create_app(config_class: type = Config) -> Flask:
     from app.routes.auth import bp as auth_bp
     from app.routes.main import bp as main_bp
     from app.routes.paineis import bp as paineis_bp
+    from app.routes.servicos import bp as servicos_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(paineis_bp)
+    app.register_blueprint(servicos_bp)
+
+    from app.utils import formatar_preco
+    app.jinja_env.filters["brl"] = formatar_preco
     return app
