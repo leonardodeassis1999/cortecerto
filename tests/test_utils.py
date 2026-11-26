@@ -37,3 +37,25 @@ def test_formatar_preco_no_padrao_brasileiro():
     assert formatar_preco(Decimal("35")) == "35,00"
     assert formatar_preco(Decimal("55.5")) == "55,50"
     assert formatar_preco(None) == ""
+
+
+def test_parse_hora():
+    from datetime import time
+    from app.utils import parse_hora
+    assert parse_hora("08:00") == time(8, 0)
+    assert parse_hora("8:30") == time(8, 30)
+    assert parse_hora(" 18:00:00 ") == time(18, 0)
+    assert parse_hora("25:00") is None
+    assert parse_hora("abc") is None
+    assert parse_hora("") is None
+    assert parse_hora(None) is None
+
+
+def test_periodos_se_sobrepoem():
+    from datetime import time
+    from app.utils import periodos_se_sobrepoem
+    t = time
+    assert periodos_se_sobrepoem(t(8), t(12), t(10), t(14))        # cruzam
+    assert periodos_se_sobrepoem(t(8), t(18), t(10), t(11))        # um dentro do outro
+    assert not periodos_se_sobrepoem(t(8), t(12), t(12), t(18))    # só encostam
+    assert not periodos_se_sobrepoem(t(8), t(12), t(14), t(18))    # separados

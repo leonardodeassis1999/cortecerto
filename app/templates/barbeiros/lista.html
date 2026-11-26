@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block titulo %}Barbeiros - CorteCerto{% endblock %}
+{% block conteudo %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h4 mb-0">T11 Barbeiros</h1>
+  <a class="btn btn-dark" href="{{ url_for('barbeiros.novo') }}">+ Novo barbeiro</a>
+</div>
+
+{% if barbeiros %}
+<div class="table-responsive">
+  <table class="table align-middle">
+    <thead>
+      <tr><th>Nome</th><th>E-mail</th><th>Especialidade</th><th>Status</th><th class="text-end">Ações</th></tr>
+    </thead>
+    <tbody>
+      {% for b in barbeiros %}
+      <tr>
+        <td>{{ b.usuario.nome }}</td>
+        <td>{{ b.usuario.email }}</td>
+        <td>{{ b.especialidade or '-' }}</td>
+        <td>
+          {% if b.ativo %}<span class="badge bg-success">Ativo</span>
+          {% else %}<span class="badge bg-secondary">Inativo</span>{% endif %}
+        </td>
+        <td class="text-end">
+          <a class="btn btn-outline-dark btn-sm" href="{{ url_for('barbeiros.horarios', barbeiro_id=b.id) }}">Horários</a>
+          <a class="btn btn-outline-dark btn-sm" href="{{ url_for('barbeiros.editar', barbeiro_id=b.id) }}">Editar</a>
+          <form method="post" action="{{ url_for('barbeiros.alternar', barbeiro_id=b.id) }}" class="d-inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-outline-secondary btn-sm">
+              {{ 'Desativar' if b.ativo else 'Ativar' }}
+            </button>
+          </form>
+          <form method="post" action="{{ url_for('barbeiros.excluir', barbeiro_id=b.id) }}" class="d-inline"
+                onsubmit="return confirm('Excluir o barbeiro {{ b.usuario.nome | e }}?');">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-outline-danger btn-sm">Excluir</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+  <p class="text-muted">Nenhum barbeiro cadastrado ainda.</p>
+{% endif %}
+{% endblock %}

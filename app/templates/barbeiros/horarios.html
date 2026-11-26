@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% from "_macros.html" import campo %}
+{% block titulo %}Horários - CorteCerto{% endblock %}
+{% block conteudo %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h4 mb-0">Horários de trabalho: {{ barbeiro.usuario.nome }}</h1>
+  <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('barbeiros.lista') }}">Voltar</a>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead><tr><th>Dia</th><th>Períodos</th></tr></thead>
+        <tbody>
+          {% for dia in range(7) %}
+          <tr>
+            <td>{{ nomes_dias[dia] }}</td>
+            <td>
+              {% for h in por_dia[dia] %}
+                <span class="d-inline-flex align-items-center me-3">
+                  {{ h.hora_inicio.strftime('%H:%M') }} às {{ h.hora_fim.strftime('%H:%M') }}
+                  <form method="post" class="ms-1"
+                        action="{{ url_for('barbeiros.excluir_horario', barbeiro_id=barbeiro.id, horario_id=h.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-sm btn-outline-danger py-0 px-1"
+                            title="Remover este período">&times;</button>
+                  </form>
+                </span>
+              {% else %}
+                <span class="text-muted">Folga</span>
+              {% endfor %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="h6">Adicionar período</h2>
+        <form method="post" novalidate>
+          {{ form.hidden_tag() }}
+          <div class="mb-3">
+            {{ form.dia_semana.label(class_="form-label") }}
+            {{ form.dia_semana(class_="form-select") }}
+          </div>
+          {{ campo(form.hora_inicio) }}
+          {{ campo(form.hora_fim, ajuda="Para pausa de almoço, cadastre dois períodos no mesmo dia. Ex.: 08:00-12:00 e 14:00-18:00.") }}
+          <button type="submit" class="btn btn-dark">Adicionar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

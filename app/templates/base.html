@@ -16,6 +16,7 @@
         {% if current_user.is_authenticated %}
           {% if current_user.tipo == 'admin' %}
             <a class="nav-link text-light me-3" href="{{ url_for('servicos.lista') }}">Serviços</a>
+            <a class="nav-link text-light me-3" href="{{ url_for('barbeiros.lista') }}">Barbeiros</a>
           {% endif %}
           <span class="navbar-text me-3">Olá, {{ current_user.nome.split(' ')[0] }}</span>
           <form method="post" action="{{ url_for('auth.logout') }}" class="d-inline">
