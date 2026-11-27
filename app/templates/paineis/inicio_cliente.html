@@ -1,6 +1,27 @@
 {% extends "base.html" %}
+{% from "_macros.html" import status_badge %}
 {% block titulo %}T03 Início - CorteCerto{% endblock %}
 {% block conteudo %}
-  <h1 class="h4">T03 Início</h1>
-  <p class="text-muted">Aqui o cliente vai escolher serviço e barbeiro. (em construção)</p>
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <h1 class="h4">Olá, {{ current_user.nome.split(' ')[0] }}!</h1>
+    <p class="text-muted">O que você quer fazer hoje?</p>
+
+    {% if proximo %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="small text-muted text-uppercase">Próximo agendamento</div>
+        <div class="h5 mb-1">{{ proximo.data.strftime('%d/%m/%Y') }} - {{ proximo.hora_inicio.strftime('%H:%M') }}</div>
+        <div class="text-muted">{{ proximo.servico.nome }} - {{ proximo.barbeiro.usuario.nome }}</div>
+        <div class="mt-2">{{ status_badge(proximo.status) }}</div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="d-grid gap-2">
+      <a class="btn btn-dark" href="{{ url_for('agendar.escolher') }}">Novo agendamento</a>
+      <a class="btn btn-outline-dark" href="{{ url_for('agendamentos.lista') }}">Meus agendamentos</a>
+    </div>
+  </div>
+</div>
 {% endblock %}

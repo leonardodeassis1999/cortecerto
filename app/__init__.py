@@ -19,6 +19,8 @@ def create_app(config_class: type = Config) -> Flask:
     csrf.init_app(app)
 
     from app import models  # noqa: F401  (registra as tabelas)
+    from app.routes.agendamentos import bp as agendamentos_bp
+    from app.routes.agendar import bp as agendar_bp
     from app.routes.auth import bp as auth_bp
     from app.routes.barbeiros import bp as barbeiros_bp
     from app.routes.main import bp as main_bp
@@ -30,6 +32,8 @@ def create_app(config_class: type = Config) -> Flask:
     app.register_blueprint(paineis_bp)
     app.register_blueprint(servicos_bp)
     app.register_blueprint(barbeiros_bp)
+    app.register_blueprint(agendar_bp)
+    app.register_blueprint(agendamentos_bp)
 
     from app.utils import formatar_preco
     app.jinja_env.filters["brl"] = formatar_preco

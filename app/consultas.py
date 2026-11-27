@@ -22,3 +22,18 @@ def contar_agendamentos_futuros(**filtros) -> int:
         )
     )
     return consulta.count()
+
+
+def proximo_agendamento(cliente_id: int):
+    """T03: o próximo agendamento Confirmado do cliente (ou None)."""
+    agora = datetime.now()
+    return (
+        Agendamento.query.filter_by(cliente_id=cliente_id, status=STATUS_CONFIRMADO)
+        .filter(or_(
+            Agendamento.data > agora.date(),
+            and_(Agendamento.data == agora.date(),
+                 Agendamento.hora_inicio >= agora.time()),
+        ))
+        .order_by(Agendamento.data, Agendamento.hora_inicio)
+        .first()
+    )

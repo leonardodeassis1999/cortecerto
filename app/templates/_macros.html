@@ -9,3 +9,10 @@
     {% if ajuda %}<div class="form-text">{{ ajuda }}</div>{% endif %}
   </div>
 {% endmacro %}
+
+{# Etiqueta colorida do status (RN07): verde, cinza e vermelho como no protótipo #}
+{% macro status_badge(status) %}
+  {% if status == 'Confirmado' %}<span class="badge bg-success">Confirmado</span>
+  {% elif status == 'Concluído' %}<span class="badge bg-secondary">Concluído</span>
+  {% else %}<span class="badge bg-danger">{{ status }}</span>{% endif %}
+{% endmacro %}

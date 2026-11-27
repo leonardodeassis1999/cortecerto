@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% from "_macros.html" import status_badge %}
+{% block titulo %}Meus agendamentos - CorteCerto{% endblock %}
+{% block conteudo %}
+<div class="row justify-content-center">
+  <div class="col-md-9 col-lg-7">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h1 class="h4 mb-0">T07 Meus agendamentos</h1>
+      <a class="btn btn-dark" href="{{ url_for('agendar.escolher') }}">Novo agendamento</a>
+    </div>
+
+    {% for a in agendamentos %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="fw-bold">{{ a.data.strftime('%d/%m/%Y') }} - {{ a.hora_inicio.strftime('%H:%M') }}</div>
+        <div class="text-muted">{{ a.servico.nome }} - {{ a.barbeiro.usuario.nome }}</div>
+        <div class="mt-2">{{ status_badge(a.status) }}</div>
+        {% if a.id in pode_alterar %}
+        <div class="mt-2">
+          <a class="btn btn-outline-primary btn-sm" href="{{ url_for('agendamentos.remarcar', agendamento_id=a.id) }}">Remarcar</a>
+          <button type="button" class="btn btn-outline-danger btn-sm"
+                  data-bs-toggle="modal" data-bs-target="#cancelar-{{ a.id }}">Cancelar</button>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if a.id in pode_alterar %}
+    {# T07-P Pop-up cancelar #}
+    <div class="modal fade" id="cancelar-{{ a.id }}" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+          <div class="modal-body p-4">
+            <h2 class="h5">Cancelar agendamento?</h2>
+            <p class="small text-muted mb-1">{{ a.servico.nome }} - {{ a.data.strftime('%d/%m/%Y') }} - {{ a.hora_inicio.strftime('%H:%M') }}</p>
+            <p class="small text-muted">O horário voltará a ficar livre.</p>
+            <form method="post" action="{{ url_for('agendamentos.cancelar', agendamento_id=a.id) }}" class="d-grid gap-2">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="btn btn-outline-danger">Sim, cancelar</button>
+              <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Voltar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% else %}
+      <p class="text-muted">Você ainda não tem agendamentos.</p>
+    {% endfor %}
+
+    <a class="btn btn-outline-secondary" href="{{ url_for('paineis.inicio_cliente') }}">Voltar</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block titulo %}Confirmação - CorteCerto{% endblock %}
+{% block conteudo %}
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <h1 class="h4 mb-3">T06 {{ 'Confirme a remarcação' if remarcando else 'Confirme seu agendamento' }}</h1>
+    <div class="card mb-3">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><small class="text-muted d-block">Serviço</small><strong>{{ servico.nome }}</strong></li>
+        <li class="list-group-item"><small class="text-muted d-block">Barbeiro</small><strong>{{ barbeiro.usuario.nome }}</strong></li>
+        <li class="list-group-item"><small class="text-muted d-block">Data</small><strong>{{ dia.strftime('%d/%m/%Y') }} ({{ nome_dia }})</strong></li>
+        <li class="list-group-item"><small class="text-muted d-block">Horário</small><strong>{{ hora.strftime('%H:%M') }} às {{ fim.strftime('%H:%M') }}</strong></li>
+        <li class="list-group-item"><small class="text-muted d-block">Duração</small><strong>{{ servico.duracao_minutos }} minutos</strong></li>
+        <li class="list-group-item"><small class="text-muted d-block">Preço</small><strong>R$ {{ servico.preco | brl }}</strong></li>
+      </ul>
+    </div>
+
+    <form method="post" action="{{ url_for('agendar.confirmar') }}" class="d-grid gap-2">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      {% for nome, valor in params.items() %}<input type="hidden" name="{{ nome }}" value="{{ valor }}">{% endfor %}
+      <input type="hidden" name="data" value="{{ dia.isoformat() }}">
+      <input type="hidden" name="hora" value="{{ hora.strftime('%H:%M') }}">
+      <button type="submit" class="btn btn-success">Confirmar agendamento</button>
+      <a class="btn btn-outline-primary" href="{{ url_for('agendar.data_horario', data=dia.isoformat(), **params) }}">Alterar</a>
+      <a class="btn btn-outline-danger"
+         href="{{ url_for('agendamentos.lista') if remarcando else url_for('paineis.inicio_cliente') }}">Cancelar operação</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

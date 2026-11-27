@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block titulo %}Serviço e barbeiro - CorteCerto{% endblock %}
+{% block conteudo %}
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <h1 class="h4 mb-3">T04 Serviço e barbeiro</h1>
+
+    {% if not servicos or not barbeiros %}
+      <p class="text-muted">Ainda não há serviços ou barbeiros disponíveis para agendamento.</p>
+      <a class="btn btn-outline-secondary" href="{{ url_for('paineis.inicio_cliente') }}">Voltar</a>
+    {% else %}
+    <form method="get" action="{{ url_for('agendar.data_horario') }}">
+      <h2 class="h6">Escolha o serviço</h2>
+      <div class="list-group mb-4">
+        {% for s in servicos %}
+        <label class="list-group-item d-flex justify-content-between align-items-center">
+          <span>
+            <input class="form-check-input me-2" type="radio" name="servico" value="{{ s.id }}"
+                   {{ 'checked' if servico_id == s.id }} required>
+            <strong>{{ s.nome }}</strong>
+            <small class="text-muted ms-2">{{ s.duracao_minutos }} min</small>
+          </span>
+          <span class="fw-semibold">R$ {{ s.preco | brl }}</span>
+        </label>
+        {% endfor %}
+      </div>
+
+      <h2 class="h6">Escolha o barbeiro</h2>
+      <div class="list-group mb-4">
+        {% for b in barbeiros %}
+        <label class="list-group-item">
+          <input class="form-check-input me-2" type="radio" name="barbeiro" value="{{ b.id }}"
+                 {{ 'checked' if barbeiro_id == b.id }} required>
+          <strong>{{ b.usuario.nome }}</strong>
+          {% if b.especialidade %}<small class="text-muted ms-2">{{ b.especialidade }}</small>{% endif %}
+        </label>
+        {% endfor %}
+      </div>
+
+      <button type="submit" class="btn btn-dark">Continuar</button>
+      <a class="btn btn-outline-secondary" href="{{ url_for('paineis.inicio_cliente') }}">Voltar</a>
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

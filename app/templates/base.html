@@ -17,6 +17,9 @@
           {% if current_user.tipo == 'admin' %}
             <a class="nav-link text-light me-3" href="{{ url_for('servicos.lista') }}">Serviços</a>
             <a class="nav-link text-light me-3" href="{{ url_for('barbeiros.lista') }}">Barbeiros</a>
+          {% elif current_user.tipo == 'cliente' %}
+            <a class="nav-link text-light me-3" href="{{ url_for('agendar.escolher') }}">Agendar</a>
+            <a class="nav-link text-light me-3" href="{{ url_for('agendamentos.lista') }}">Meus agendamentos</a>
           {% endif %}
           <span class="navbar-text me-3">Olá, {{ current_user.nome.split(' ')[0] }}</span>
           <form method="post" action="{{ url_for('auth.logout') }}" class="d-inline">
@@ -38,5 +41,6 @@
     {% endwith %}
     {% block conteudo %}{% endblock %}
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

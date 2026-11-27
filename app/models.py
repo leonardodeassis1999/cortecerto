@@ -143,6 +143,11 @@ class Agendamento(db.Model):
         db.Index("ix_agendamento_barbeiro_data", "barbeiro_id", "data", "hora_inicio"),
     )
 
+    @property
+    def inicio(self) -> datetime:
+        """Data e hora de início juntas (usada nas regras de prazo)."""
+        return datetime.combine(self.data, self.hora_inicio)
+
     def __repr__(self) -> str:
         return f"<Agendamento {self.data} {self.hora_inicio} {self.status}>"
 
